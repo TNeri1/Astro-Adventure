@@ -1,0 +1,93 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Enemy : MonoBehaviour
+{
+
+    public Vector3 moveDir;
+    private Vector3 startPosition;
+
+    public float moveSpeed;
+    public float moveDistance;
+    private bool movingToStart;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        startPosition = transform.position;
+        //movingToTargetPos = true;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (movingToStart)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, startPosition, moveSpeed * Time.deltaTime);
+
+            if (transform.position == startPosition)
+            {
+                movingToStart = false;
+            }
+        }
+        else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, startPosition + (moveDir * moveDistance), moveSpeed * Time.deltaTime);
+
+            if (transform.position == startPosition + (moveDir * moveDistance))
+            {
+                movingToStart = true;
+            }
+        }
+    }
+
+    //public float speed;
+    //public Vector3 moveDirection;
+    //public float moveDistance;
+
+    //private Vector3 startPos;
+    //private bool movingToStart;
+
+    //// Start is called before the first frame update
+    //void Start()
+    //{
+    //    startPos = transform.position;
+    //}
+
+    //// Update is called once per frame
+    //void Update()
+    //{
+    //    // are we moving to the start?
+    //    if (movingToStart)
+    //    {
+    //        // overtime move towards the start position
+    //        transform.position = Vector3.MoveTowards(transform.position, startPos, speed * Time.deltaTime);
+
+    //        // have we reached our target?
+    //        if (transform.position == startPos)
+    //        {
+    //            movingToStart = false;
+    //        }
+    //    }
+    //    // are we moving away from the start?
+    //    else
+    //    {
+    //        transform.position = Vector3.MoveTowards(transform.position, startPos + (moveDirection * moveDistance), speed * Time.deltaTime);
+
+    //        if (transform.position == startPos + (moveDirection * moveDistance))
+    //        {
+    //            movingToStart = true;
+    //        }
+    //    }
+    //}
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // Call GameOver() that is inside "Player" class
+            collision.gameObject.GetComponent<Player>().GameOver();
+        }
+    }
+}
